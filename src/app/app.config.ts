@@ -1,11 +1,11 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
-import { routes } from './app.routes';
+import { importProvidersFrom } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
-    provideHttpClient(withFetch()) // ✅ active fetch pour SSR
+    provideHttpClient(withFetch()),
+    importProvidersFrom(FormsModule)
   ]
 };

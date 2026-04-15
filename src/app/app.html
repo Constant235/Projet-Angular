@@ -1,15 +1,68 @@
-<h1>Application météo</h1>
+<!DOCTYPE html>
+<html lang="fr">
 
-<!-- Affichage du loader -->
-<div *ngIf="loading">
-  🔄 Chargement des données météo...
-</div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application Météo</title>
+</head>
 
-<!-- Affichage des données météo -->
-<div *ngIf="weatherData && !loading">
-  <h2>Météo à {{ weatherData.name }}</h2>
-  <p>🌡 Température : {{ weatherData.main.temp }} °C</p>
-  <p>☁️ Description : {{ weatherData.weather[0].description }}</p>
-  <p>💧 Humidité : {{ weatherData.main.humidity }} %</p>
-  <p>💨 Vent : {{ weatherData.wind.speed }} m/s</p>
-</div>
+<body>
+  <main class="container-fluid">
+    <i class="bi bi-cloud" style="font-size: 50px;"></i>
+    <h1>Application Météo</h1>
+    <div class="container-content">
+      <div class="search-box">
+        <input type="text" [(ngModel)]="city" placeholder="Entrez une ville" (keyup.enter)="searchWeather()" />
+
+        <button (click)="searchWeather()">Rechercher</button>
+      </div>
+
+      <div *ngIf="loading" class="loader">
+        Chargement des données météo...
+      </div>
+
+      <table *ngIf="weatherList.length > 0 && !loading">
+
+        <thead>
+          <tr>
+            <th>Ville</th>
+            <th><i class="bi bi-thermometer-half m-2"></i>Température</th>
+            <th><i class="bi bi-cloudy-fill m-2"></i>Description</th>
+            <th><i class="bi bi-droplet-fill m-2"></i>Humidité</th>
+            <th><i class="bi bi-wind m-2"></i>Vent</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let weather of weatherList; let i = index">
+
+            <td data-label="Ville">{{ weather.name }}</td>
+            <td data-label="Température">{{ weather.main.temp }} °C</td>
+            <td data-label="Description">{{ weather.weather[0].description }}</td>
+            <td data-label="Humidité">{{ weather.main.humidity }} %</td>
+            <td data-label="Vent">{{ weather.wind.speed }} m/s</td>
+
+            <td data-label="Action">
+              <button class="delete" (click)="removeCity(i)">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+      <!-- Message si aucune donnée -->
+      <div *ngIf="weatherList.length === 0 && !loading" class="loader">
+        Aucune ville recherchée pour le moment
+      </div>
+
+    </div>
+  </main>
+</body>
+
+</html>
