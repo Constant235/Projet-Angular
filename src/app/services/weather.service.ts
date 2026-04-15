@@ -13,6 +13,7 @@ export class WeatherService {
 
   getWeather(city: string) {
     return this.http.get(
+      
       `${this.apiUrl}?q=${city}&appid=${environment.openWeatherApiKey}&units=metric&lang=fr`
     );
   }

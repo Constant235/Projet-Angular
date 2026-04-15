@@ -24,7 +24,7 @@ export class App implements OnInit {
 
   ngOnInit() {
 
-    // 🔹 Charger les données sauvegardées
+    // Charger les données sauvegardées
     if (isPlatformBrowser(this.platformId)) {
       const saved = localStorage.getItem('weatherList');
       if (saved) {
@@ -32,7 +32,7 @@ export class App implements OnInit {
       }
     }
 
-    // 🔹 Ville par défaut
+    // Ville par défaut
     this.searchWeather('');
   }
 
@@ -48,7 +48,7 @@ export class App implements OnInit {
       .subscribe({
         next: (data: any) => {
 
-          // 🔹 éviter doublons
+          // éviter doublons
           const exists = this.weatherList.some(
             w => w.name.toLowerCase() === data.name.toLowerCase()
           );
@@ -60,7 +60,7 @@ export class App implements OnInit {
           this.city = '';
           this.loading = false;
 
-          // 💾 sauvegarde localStorage
+          // sauvegarde localStorage
           if (isPlatformBrowser(this.platformId)) {
             localStorage.setItem(
               'weatherList',

@@ -1,60 +1,56 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
 
 :root {
-  --color-primary: #333;
-  --color-secondary: #007BFF;
-  --color-danger: #cc0000;
-  --color-danger-hover: #990000;
-  --radius: 10px;
-  --shadow: 0 4px 12px rgba(0,0,0,0.15);
+  --primary: #1e3a8a;
+  --secondary: #0ea5e9;
+  --background: #f5f7fb;
+  --card: #ffffff;
+  --danger: #ef4444;
+  --radius: 12px;
+  --shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
-
 
 body {
-  font-family: "Montserrat", Arial, sans-serif;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.75), rgba(255, 255, 255, 0.8)),
-    url("Images/360_F_261556117_pUFmcC1KA9igbzTS4QWoRtd3oZQnAHSq.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: var(--color-primary);
+  font-family: "Montserrat", sans-serif;
+  background: var(--background);
+  color: #111;
 }
 
-main {
-  min-height: 100vh;
+
+header {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  padding: 25px 15px;
+  color: white;
+  text-align: center;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.titre {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 20px;
+  gap: 5px;
+  margin-bottom: 15px;
 }
 
-.container-content {
-  width: 100%;
-  max-width: 900px;
-}
-
-/* TITRE */
-h1 {
-  text-align: center;
-  padding: 15px;
+.titre h3 {
+  font-size: 22px;
   font-weight: 600;
 }
 
-/* SEARCH */
 .search-box {
   display: flex;
-  gap: 10px;
   justify-content: center;
-  margin-bottom: 25px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -62,111 +58,87 @@ h1 {
   padding: 12px;
   width: 260px;
   max-width: 100%;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: var(--radius);
   outline: none;
-  transition: 0.2s;
+  font-size: 14px;
 }
 
 .search-box input:focus {
-  border-color: var(--color-secondary);
-  box-shadow: 0 0 5px rgba(0,123,255,0.3);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.4);
 }
 
 .search-box button {
   padding: 12px 18px;
   border: none;
-  background: var(--color-secondary);
-  color: white;
   border-radius: var(--radius);
+  background: #fff;
+  color: var(--primary);
+  font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
-  font-weight: 500;
 }
 
-.search-box button:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
+main.container-fluid {
+  padding: 30px 15px;
+  display: flex;
+  justify-content: center;
 }
 
-/* LOADER */
+.container-content {
+  width: 100%;
+  max-width: 1000px;
+}
+
 .loader {
   text-align: center;
-  font-size: 18px;
-  margin: 20px;
-}
-
-/* TABLE */
-.table-wrapper {
-  overflow-x: auto;
+  padding: 20px;
+  font-size: 16px;
+  color: #555;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  border-radius: 12px;
+  background: var(--card);
+  border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
 }
 
-th {
-  background: var(--color-primary);
+thead {
+  background: var(--primary);
   color: white;
-  padding: 14px;
-  text-align: center;
 }
 
-td {
+th, td {
   padding: 14px;
   text-align: center;
 }
 
 tr:nth-child(even) {
-  background: #f4f4f4;
+  background: #f8fafc;
 }
 
-tr:hover {
-  background: #eaeaea;
-  transition: 0.2s;
-}
 
 button.delete {
-  background: var(--color-danger);
-  color: white;
+  background: var(--danger);
   border: none;
+  color: white;
   padding: 6px 10px;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   transition: 0.2s;
 }
 
 button.delete:hover {
-  background: var(--color-danger-hover);
   transform: scale(1.05);
-}
-
-button.delete:focus-visible {
-  outline: 2px solid var(--color-danger);
-  outline-offset: 2px;
+  opacity: 0.9;
 }
 
 
-/* RESPONSIVE TABLETTE */
+/* RESPONSIVE TABLET */
 @media (max-width: 768px) {
-
-  main {
-    padding: 15px;
-  }
-
-  h1 {
-    font-size: 22px;
-  }
-
-  .search-box {
-    flex-direction: column;
-    align-items: stretch;
-  }
 
   .search-box input,
   .search-box button {
@@ -176,8 +148,8 @@ button.delete:focus-visible {
   table {
     font-size: 14px;
   }
-
 }
+
 
 /* RESPONSIVE MOBILE */
 @media (max-width: 600px) {
@@ -192,16 +164,16 @@ button.delete:focus-visible {
   }
 
   tr {
+    background: var(--card);
     margin-bottom: 15px;
-    padding: 12px;
     border-radius: var(--radius);
-    background: white;
     box-shadow: var(--shadow);
+    padding: 10px;
   }
 
   td {
     text-align: left;
-    padding: 8px;
+    padding: 10px;
     position: relative;
   }
 
@@ -209,14 +181,12 @@ button.delete:focus-visible {
     content: attr(data-label);
     font-weight: 600;
     display: block;
-    margin-bottom: 4px;
-    color: #555;
+    margin-bottom: 5px;
+    color: #444;
   }
 
   button.delete {
     width: 100%;
     margin-top: 10px;
-    border-radius: 8px;
-
   }
 }

@@ -1,22 +1,31 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Application Météo</title>
+  <title>Document</title>
 </head>
 
 <body>
-  <main class="container-fluid">
-    <i class="bi bi-cloud" style="font-size: 50px;"></i>
-    <h1>Application Météo</h1>
-    <div class="container-content">
-      <div class="search-box">
-        <input type="text" [(ngModel)]="city" placeholder="Entrez une ville" (keyup.enter)="searchWeather()" />
+  <header>
+    <div class="titre">
+      <p><i class="bi bi-cloud" style="font-size: 50px;"></i></p>
+      <h3>Application Météo</h3>
+    </div>
+    <div class="search-box">
+      <input type="text" [(ngModel)]="city" placeholder="Entrez une ville" (keyup.enter)="searchWeather()" />
 
-        <button (click)="searchWeather()">Rechercher</button>
-      </div>
+      <button (click)="searchWeather()">Rechercher</button>
+    </div>
+  </header>
+  <main class="container-fluid">
+
+
+
+
+    <div class="container-content">
+
 
       <div *ngIf="loading" class="loader">
         Chargement des données météo...
