@@ -8,70 +8,88 @@
 </head>
 
 <body>
-  <header>
-    <div class="titre">
-      <p><i class="bi bi-cloud" style="font-size: 50px;"></i></p>
-      <h3>Application Météo</h3>
-    </div>
-    <div class="search-box">
-      <input type="text" [(ngModel)]="city" placeholder="Entrez une ville" (keyup.enter)="searchWeather()" />
+  <div class="app-container">
 
-      <button (click)="searchWeather()">Rechercher</button>
-    </div>
-  </header>
-  <main class="container-fluid">
+    <!-- HEADER -->
+    <header class="header">
 
+      <h1>🌤️ Application Météo</h1>
 
-
-
-    <div class="container-content">
-
-
-      <div *ngIf="loading" class="loader">
-        Chargement des données météo...
+      
+      <div class="datetime">
+        <p>{{ currentDateTime | date:'fullDate':'':'fr-FR' }}</p>
+        <span>{{ currentDateTime | date:'HH:mm:ss':'':'fr-FR' }}</span>
       </div>
 
-      <table *ngIf="weatherList.length > 0 && !loading">
+      
+      <div class="search-box">
 
-        <thead>
-          <tr>
-            <th>Ville</th>
-            <th><i class="bi bi-thermometer-half m-2"></i>Température</th>
-            <th><i class="bi bi-cloudy-fill m-2"></i>Description</th>
-            <th><i class="bi bi-droplet-fill m-2"></i>Humidité</th>
-            <th><i class="bi bi-wind m-2"></i>Vent</th>
-            <th>Action</th>
-          </tr>
-        </thead>
+        <input type="text" [(ngModel)]="city" placeholder="Entrez une ville..." (keyup.enter)="onSearch()" />
 
-        <tbody>
-          <tr *ngFor="let weather of weatherList; let i = index">
+        <button (click)="onSearch()">
+          Rechercher
+        </button>
 
-            <td data-label="Ville">{{ weather.name }}</td>
-            <td data-label="Température">{{ weather.main.temp }} °C</td>
-            <td data-label="Description">{{ weather.weather[0].description }}</td>
-            <td data-label="Humidité">{{ weather.main.humidity }} %</td>
-            <td data-label="Vent">{{ weather.wind.speed }} m/s</td>
+      </div>
 
-            <td data-label="Action">
-              <button class="delete" (click)="removeCity(i)">
-                <i class="bi bi-x-lg"></i>
-              </button>
-            </td>
+      
+      <div class="error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
 
-          </tr>
+    </header>
 
-        </tbody>
+    <!-- LISTE -->
+    <div class="weather-list" *ngIf="weatherList.length > 0">
 
-      </table>
+      <div class="weather-card" *ngFor="let weather of weatherList; let i = index">
 
-      <!-- Message si aucune donnée -->
-      <div *ngIf="weatherList.length === 0 && !loading" class="loader">
-        Aucune ville recherchée pour le moment
+        <div class="city-header">
+          <h2>{{ weather.name }}</h2>
+          <p class="temp">{{ weather.main.temp }}°C</p>
+          <p class="desc">{{ weather.weather[0].description }}</p>
+        </div>
+
+        <table class="weather-table">
+
+          <thead>
+            <tr>
+              <th><i class="bi bi-droplet"></i> Humidité</th>
+              <th><i class="bi bi-wind"></i> Vent</th>
+              <th><i class="bi bi-graph-up"></i> Pression</th>
+              <th><i class="bi bi-eye"></i> Visibilité</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>{{ weather.main.humidity }} %</td>
+              <td>{{ weather.wind.speed }} m/s</td>
+              <td>{{ weather.main.pressure }} hPa</td>
+              <td>{{ weather.visibility }} m</td>
+
+              <td>
+                <button class="delete-btn" (click)="removeCity(i)">
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+
       </div>
 
     </div>
-  </main>
+
+    <!-- EMPTY -->
+    <div class="empty" *ngIf="weatherList.length === 0">
+      Aucune ville recherchée
+    </div>
+
+  </div>
+
 </body>
 
 </html>

@@ -1,7 +1,16 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Inject,
+  PLATFORM_ID,
+  ChangeDetectorRef
+} from '@angular/core';
+
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WeatherService } from './services/weather.service';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,80 +19,101 @@ import { WeatherService } from './services/weather.service';
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
-
-export class App implements OnInit {
+export class App implements OnInit, OnDestroy {
 
   city: string = '';
   weatherList: any[] = [];
-  loading: boolean = false;
+  errorMessage: string = '';
+
+  // horloge
+  currentDateTime: Date = new Date();
+  private clockSub!: Subscription;
 
   constructor(
     private weatherService: WeatherService,
+    private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
+    this.loadSavedData();
+    this.startClock();
+  }
 
-    // Charger les données sauvegardées
-    if (isPlatformBrowser(this.platformId)) {
-      const saved = localStorage.getItem('weatherList');
-      if (saved) {
-        this.weatherList = JSON.parse(saved);
-      }
+  
+  /* HORLOGE */
+  startClock() {
+    this.clockSub = interval(1000).subscribe(() => {
+      this.currentDateTime = new Date();
+      this.cdr.detectChanges();
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.clockSub) this.clockSub.unsubscribe();
+  }
+
+  
+  /* RECHERCHE */
+  onSearch() {
+    const cityToSearch = this.city.trim();
+
+    if (!cityToSearch) {
+      this.errorMessage = "Veuillez entrer un lieu.";
+      return;
     }
 
-    // Ville par défaut
-    this.searchWeather('');
+    this.searchWeather(cityToSearch);
   }
 
-  searchWeather(cityName?: string) {
+  searchWeather(cityName: string) {
 
-    const cityToSearch = (cityName || this.city).trim();
+    this.errorMessage = '';
 
-    if (!cityToSearch) return;
+    this.weatherService.getWeather(cityName).subscribe({
+      next: (data: any) => {
 
-    this.loading = true;
+        const exists = this.weatherList.some(
+          w => w.name.toLowerCase() === data.name.toLowerCase()
+        );
 
-    this.weatherService.getWeather(cityToSearch)
-      .subscribe({
-        next: (data: any) => {
-
-          // éviter doublons
-          const exists = this.weatherList.some(
-            w => w.name.toLowerCase() === data.name.toLowerCase()
-          );
-
-          if (!exists) {
-            this.weatherList.push(data);
-          }
-
-          this.city = '';
-          this.loading = false;
-
-          // sauvegarde localStorage
-          if (isPlatformBrowser(this.platformId)) {
-            localStorage.setItem(
-              'weatherList',
-              JSON.stringify(this.weatherList)
-            );
-          }
-        },
-
-        error: (err) => {
-          console.error('Erreur API météo :', err);
-          this.loading = false;
+        if (!exists) {
+          this.weatherList.push(data);
+          this.saveData();
+        } else {
+          this.errorMessage = "Lieu existant.";
         }
-      });
+
+        this.city = '';
+      },
+
+      error: (err) => {
+        if (err.status === 404) {
+          this.errorMessage = "Lieu introuvable.";
+        } else {
+          this.errorMessage = "Erreur réseau.";
+        }
+      }
+    });
   }
 
+  loadSavedData() {
+    if (isPlatformBrowser(this.platformId)) {
+      const data = localStorage.getItem('weatherList');
+      if (data) this.weatherList = JSON.parse(data);
+    }
+  }
+
+  saveData() {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('weatherList', JSON.stringify(this.weatherList));
+    }
+  }
+
+
+  /* SUPPRESSION */
   removeCity(index: number) {
     this.weatherList.splice(index, 1);
-
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem(
-        'weatherList',
-        JSON.stringify(this.weatherList)
-      );
-    }
+    this.saveData();
   }
 }
