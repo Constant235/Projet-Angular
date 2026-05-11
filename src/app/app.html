@@ -1,27 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-
 <body>
   <div class="app-container">
 
     <!-- HEADER -->
     <header class="header">
 
-      <h1>🌤️ Application Météo</h1>
+      <h1><i class="bi bi-cloud-sun"></i> Application Météo</h1>
 
-      
+
       <div class="datetime">
         <p>{{ currentDateTime | date:'fullDate':'':'fr-FR' }}</p>
         <span>{{ currentDateTime | date:'HH:mm:ss':'':'fr-FR' }}</span>
       </div>
 
-      
+
       <div class="search-box">
 
         <input type="text" [(ngModel)]="city" placeholder="Entrez une ville..." (keyup.enter)="onSearch()" />
@@ -32,17 +23,20 @@
 
       </div>
 
-      
-      <div class="error" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
+      @if(errorMessage) {
+        <div class="error">
+          <i class="bi bi-exclamation-triangle"></i> {{ errorMessage }}
+        </div>
+      }
 
     </header>
 
-    <!-- LISTE -->
-    <div class="weather-list" *ngIf="weatherList.length > 0">
+    <!-- liste -->
+    @if (weatherList.length > 0) {
+    <div class="weather-list">
 
-      <div class="weather-card" *ngFor="let weather of weatherList; let i = index">
+      @for (weather of weatherList; track $index; let i = $index) {
+      <div class="weather-card">
 
         <div class="city-header">
           <h2>{{ weather.name }}</h2>
@@ -51,13 +45,12 @@
         </div>
 
         <table class="weather-table">
-
           <thead>
             <tr>
-              <th><i class="bi bi-droplet"></i> Humidité</th>
-              <th><i class="bi bi-wind"></i> Vent</th>
-              <th><i class="bi bi-graph-up"></i> Pression</th>
-              <th><i class="bi bi-eye"></i> Visibilité</th>
+              <th>Humidité</th>
+              <th>Vent</th>
+              <th>Pression</th>
+              <th>Visibilité</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -68,7 +61,6 @@
               <td>{{ weather.wind.speed }} m/s</td>
               <td>{{ weather.main.pressure }} hPa</td>
               <td>{{ weather.visibility }} m</td>
-
               <td>
                 <button class="delete-btn" (click)="removeCity(i)">
                   Supprimer
@@ -76,20 +68,22 @@
               </td>
             </tr>
           </tbody>
-
         </table>
 
       </div>
+      }
 
     </div>
+    }
 
-    <!-- EMPTY -->
-    <div class="empty" *ngIf="weatherList.length === 0">
+
+    <!-- vide -->
+    @if (weatherList.length === 0) {
+    <div class="empty">
       Aucune ville recherchée
     </div>
+    }
 
   </div>
 
 </body>
-
-</html>

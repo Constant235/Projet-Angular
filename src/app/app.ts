@@ -40,8 +40,7 @@ export class App implements OnInit, OnDestroy {
     this.startClock();
   }
 
-  
-  /* HORLOGE */
+
   startClock() {
     this.clockSub = interval(1000).subscribe(() => {
       this.currentDateTime = new Date();
@@ -54,12 +53,12 @@ export class App implements OnInit, OnDestroy {
   }
 
   
-  /* RECHERCHE */
+  /* Recherche */
   onSearch() {
     const cityToSearch = this.city.trim();
 
     if (!cityToSearch) {
-      this.errorMessage = "Veuillez entrer un lieu.";
+      this.errorMessage = "Veuillez entrer un lieu !";
       return;
     }
 
@@ -81,7 +80,7 @@ export class App implements OnInit, OnDestroy {
           this.weatherList.push(data);
           this.saveData();
         } else {
-          this.errorMessage = "Lieu existant.";
+          this.errorMessage = "Lieu existant !";
         }
 
         this.city = '';
@@ -89,9 +88,9 @@ export class App implements OnInit, OnDestroy {
 
       error: (err) => {
         if (err.status === 404) {
-          this.errorMessage = "Lieu introuvable.";
+          this.errorMessage = "Lieu introuvable !";
         } else {
-          this.errorMessage = "Erreur réseau.";
+          this.errorMessage = "Erreur réseau !";
         }
       }
     });
@@ -111,7 +110,7 @@ export class App implements OnInit, OnDestroy {
   }
 
 
-  /* SUPPRESSION */
+  /* Suppression */
   removeCity(index: number) {
     this.weatherList.splice(index, 1);
     this.saveData();

@@ -7,7 +7,7 @@
 }
 
 body {
-  background: #f4f6f9;
+  background: #a7caff;
   color: #333;
 }
 
@@ -22,7 +22,9 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: linear-gradient(135deg, #1976d2, #42a5f5);
   color: white;
 
@@ -88,6 +90,8 @@ body {
   color: white;
   padding: 8px;
   border-radius: 8px;
+  width: fit-content;
+  justify-content: center;
 }
 
 /* LOADING */
